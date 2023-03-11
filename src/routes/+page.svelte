@@ -1,5 +1,6 @@
 <script lang="ts">
 	let input = '';
+	let inputRef: HTMLInputElement;
 	let items: any[] = [
 		'The Office',
 		'Brooklyn Nine Nine',
@@ -8,9 +9,15 @@
 		'The Good Place'
 	];
 	function addItem() {
-		if (input == '' || items.includes(input)) return;
+		if (input == '' || items.includes(input)) {
+			alert('Invalid Input');
+			return;
+		}
 		items = [...items, input];
 		input = '';
+		setTimeout(() => {
+			inputRef.focus();
+		}, 50);
 	}
 	function removeItem(i: number) {
 		items.splice(i, 1);
@@ -59,6 +66,10 @@
 			end = 0;
 		}
 	}
+
+	function autofocus(node: HTMLInputElement) {
+		node.focus();
+	}
 </script>
 
 <svelte:head>
@@ -66,14 +77,20 @@
 </svelte:head>
 
 <div class="layout">
+	{input}
 	<h1 style="text-align: center;">AlgoRank</h1>
-	<p>Enter Some Things You Want to Sort</p>
-	<div style="display:flex">
-		<input type="text" bind:value={input} />
-		<button style="width: 200px; margin-left:20px" on:click={() => addItem()} disabled={ranking}
-			>Add</button
-		>
+	<div style="display:flex; justify-content: space-between;">
+		<p>Enter Some Things You Want to Sort</p>
+		{#if !ranking && items.length > 1}
+			<a on:click={() => (items = [])}>Remove All</a>
+		{/if}
 	</div>
+	<form on:submit={() => addItem()}>
+		<div style="display:flex; width:100%; justify-content: space-between;">
+			<input type="text" bind:this={inputRef} bind:value={input} disabled={ranking} use:autofocus />
+			<button style="width: 200px; margin-left:20px" type="submit" disabled={ranking}>Add</button>
+		</div>
+	</form>
 	<ul>
 		{#each items as item, index}
 			<li
