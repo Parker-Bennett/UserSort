@@ -77,7 +77,6 @@
 </svelte:head>
 
 <div class="layout">
-	{input}
 	<h1 style="text-align: center;">AlgoRank</h1>
 	<div style="display:flex; justify-content: space-between;">
 		<p>Enter Some Things You Want to Sort</p>
